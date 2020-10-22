@@ -10,7 +10,7 @@
         "var_vsphere_folder":       "Templates/CentOS",
         "var_vsphere_iso_ds":       "{{env `VSPHEREISODS`}}",
         "var_iso_path":             "os/centos/8",
-        "var_iso_file":             "CentOS-8.1.1911-x86_64-dvd1.iso",
+        "var_iso_file":             "CentOS-8.2.2004-x86_64-dvd1.iso",
         "var_guest_username":       "{{env `LINUXUSER`}}",
         "var_guest_password":       "{{env `LINUXPASS`}}",
         "var_build_version":        "{{env `BUILDVERSION`}}",
@@ -72,7 +72,6 @@
             "scripts":              [
                                         "./scripts/centos/00-update.sh",
                                         "./scripts/centos/10-configure-sshd.sh",
-                                        "./scripts/centos/20-ansibleuser.sh",
                                         "./scripts/centos/80-cloudinit.sh",
                                         "./scripts/centos/95-motd.sh",
                                         "./scripts/centos/99-cleanup.sh"
