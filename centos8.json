@@ -16,8 +16,7 @@
         "var_build_version":        "{{env `BUILDVERSION`}}",
         "var_build_repo":           "{{env `BUILDREPO`}}",
         "var_build_branch":         "{{env `BUILDBRANCH`}}",
-        "var_http_server":          "{{env `HTTPSERVER`}}",
-        "var_content_library":      ""
+        "var_http_server":          "{{env `HTTPSERVER`}}"
     },
   
     "builders": [
@@ -60,8 +59,7 @@
             "ssh_password":         "{{user `var_guest_password`}}",
   
             "iso_paths":            ["{{user `var_vsphere_iso_ds`}} {{user `var_iso_path`}}/{{user `var_iso_file`}}"],
-            "boot_command":         ["<up><wait><tab><wait> text ks={{user `var_http_server`}}/centos8.cfg<enter><wait>"],
-            "shutdown_command":     "echo '{{user `var_guest_password`}}' | sudo -S -E shutdown -P now"
+            "boot_command":         ["<up><wait><tab><wait> text ks={{user `var_http_server`}}/centos8.cfg<enter><wait>"]
         }
     ],
 
@@ -71,7 +69,9 @@
             "execute_command":      "echo '{{user `var_guest_password`}}' | sudo -S -E {{ .Path }}",
             "scripts":              [
                                         "./scripts/centos/00-update.sh",
+                                        "./scripts/centos/05-repos.sh",
                                         "./scripts/centos/10-configure-sshd.sh",
+                                        "./scripts/centos/20-ansibleuser.sh",
                                         "./scripts/centos/80-cloudinit.sh",
                                         "./scripts/centos/95-motd.sh",
                                         "./scripts/centos/99-cleanup.sh"

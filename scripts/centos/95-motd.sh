@@ -5,7 +5,7 @@
 
 # Build date used for motd
 RELEASE=$(cat /etc/centos-release)
-DOCS="https://github.com/v12n-io/packer"
+DOCS="https://github.com/v12n-io/packer-centos8"
 
 # Create Issue
 cat << ISSUE > /etc/issue
