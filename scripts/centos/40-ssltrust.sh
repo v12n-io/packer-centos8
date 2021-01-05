@@ -4,7 +4,7 @@
 # @website https://blog.v12n.io
 
 # Variables
-pkiServer="REPLACEWITHPKISERVER"
+pkiServer="REPLACEWITHPKISERVER "
 pkiCerts=("rootca.cer" "issuingca.cer")
 
 # Download certificates
