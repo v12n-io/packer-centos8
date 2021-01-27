@@ -1,0 +1,20 @@
+{
+    "vcenter_folder":       "Templates/CentOS8",
+    "iso_path":             "os/centos/8",
+    "iso_file":             "CentOS-8.3.2011-x86_64-dvd1.iso",
+    "http_server":          "{{env `HTTPSERVER`}}",
+    "guest_username":       "{{env `LINUXUSER`}}",
+    "guest_password":       "{{env `LINUXPASS`}}",
+    "guest_type":           "centos8_64Guest",
+    "build_version":        "{{env `BUILDVERSION`}}",
+    "build_repo":           "{{env `BUILDREPO`}}",
+    "build_branch":         "{{env `BUILDBRANCH`}}",
+    "cpu_count":            "1",
+    "mem_count":            "1024",
+    "disk_size":            "16384",
+    "disk_thin":            "true",
+    "disk_controller":      "pvscsi",
+    "network_card":         "vmxnet3",
+    "config_file":          "centos8.cfg",
+    "script_files":         "scripts/00-update.sh,scripts/05-repos.sh,scripts/10-configuresshd.sh,scripts/20-ansibleuser.sh,scripts/40-ssltrust.sh,scripts/80-cloudinit.sh,scripts/95-motd.sh,scripts/99-cleanup.sh"
+}

@@ -1,90 +1,61 @@
 {
-    "variables": {
-        "var_vsphere_vcenter":      "{{env `VSPHEREVCENTER`}}",
-        "var_vsphere_username":     "{{env `VSPHEREUSER`}}",
-        "var_vsphere_password":     "{{env `VSPHEREPASS`}}",
-        "var_vsphere_datacenter":   "{{env `VSPHEREDATACENTER`}}",
-        "var_vsphere_cluster":      "{{env `VSPHERECLUSTER`}}",
-        "var_vsphere_datastore":    "{{env `VSPHEREDATASTORE`}}",
-        "var_vsphere_network":      "{{env `VSPHERENETWORK`}}",
-        "var_vsphere_folder":       "Templates/CentOS",
-        "var_vsphere_iso_ds":       "{{env `VSPHEREISODS`}}",
-        "var_iso_path":             "os/centos/8",
-        "var_iso_file":             "CentOS-8.3.2011-x86_64-dvd1.iso",
-        "var_guest_username":       "{{env `LINUXUSER`}}",
-        "var_guest_password":       "{{env `LINUXPASS`}}",
-        "var_build_version":        "{{env `BUILDVERSION`}}",
-        "var_build_repo":           "{{env `BUILDREPO`}}",
-        "var_build_branch":         "{{env `BUILDBRANCH`}}",
-        "var_http_server":          "{{env `HTTPSERVER`}}"
-    },
-  
     "builders": [
         {
             "type":                 "vsphere-iso",
             "name":                 "centos8",
 
-            "vcenter_server":       "{{user `var_vsphere_vcenter`}}",
-            "username":             "{{user `var_vsphere_username`}}",
-            "password":             "{{user `var_vsphere_password`}}",
+            "vcenter_server":       "{{user `vcenter_server`}}",
+            "username":             "{{user `vcenter_username`}}",
+            "password":             "{{user `vcenter_password`}}",
             "insecure_connection":  true,
   
-            "datacenter":           "{{user `var_vsphere_datacenter`}}",
-            "cluster":              "{{user `var_vsphere_cluster`}}",
-            "folder":               "{{user `var_vsphere_folder`}}",
-            "datastore":            "{{user `var_vsphere_datastore`}}",
+            "datacenter":           "{{user `vcenter_datacenter`}}",
+            "cluster":              "{{user `vcenter_cluster`}}",
+            "folder":               "{{user `vcenter_folder`}}",
+            "datastore":            "{{user `vcenter_datastore`}}",
             "convert_to_template":  true,
   
-            "vm_name":              "centos8-{{user `var_build_version`}}",
-            "guest_os_type":        "centos8_64Guest",
-            "CPUs":                 1,
-            "RAM":                  1024,
-            "disk_controller_type": "pvscsi",
+            "vm_name":              "centos8_{{user `build_version`}}",
+            "guest_os_type":        "{{user `guest_type`}}",
+            "CPUs":                 "{{user `cpu_count`}}",
+            "RAM":                  "{{user `mem_count`}}",
+            "disk_controller_type": "{{user `disk_controller`}}",
             "storage": [
                 {
-                  "disk_size":      16384,
-                  "disk_thin_provisioned": true
+                    "disk_size":                "{{user `disk_size`}}",
+                    "disk_thin_provisioned":    "{{user `disk_thin`}}"
                 }
-              ],
+            ],
             "network_adapters": [
                 {
-                  "network":        "{{user `var_vsphere_network`}}",
-                  "network_card":   "vmxnet3"
+                    "network":                  "{{user `vcenter_network`}}",
+                    "network_card":             "{{user `network_card`}}"
                 }
-              ],
-            "notes":                "VER: {{user `var_build_version`}}\nSRC: {{user `var_build_repo`}} ({{user `var_build_branch`}})\nOS: CentOS8\nISO: {{user `var_iso_file`}}",
+            ],
+            "notes":                "VER: {{user `build_version`}}\nSRC: {{user `build_repo`}} ({{user `build_branch`}})\nOS: CentOS 8 Linux\nISO: {{user `iso_file`}}",
   
             "communicator":         "ssh",
-            "ssh_username":         "{{user `var_guest_username`}}",
-            "ssh_password":         "{{user `var_guest_password`}}",
+            "ssh_username":         "{{user `guest_username`}}",
+            "ssh_password":         "{{user `guest_password`}}",
   
-            "iso_paths":            ["{{user `var_vsphere_iso_ds`}} {{user `var_iso_path`}}/{{user `var_iso_file`}}"],
-            "boot_command":         ["<up><wait><tab><wait> text ks={{user `var_http_server`}}/centos8.cfg<enter><wait>"]
+            "iso_paths":            ["[{{user `vcenter_isods`}}] {{user `iso_path`}}/{{user `iso_file`}}"],
+            "boot_command":         ["<up><wait><tab><wait> text ks={{user `http_server`}}/{{user `config_file`}}<enter><wait>"]
         }
     ],
 
     "provisioners": [
         {
             "type":                 "shell",
-            "execute_command":      "echo '{{user `var_guest_password`}}' | sudo -S -E {{ .Path }}",
-            "scripts":              [
-                                        "./scripts/centos/00-update.sh",
-                                        "./scripts/centos/05-repos.sh",
-                                        "./scripts/centos/10-configure-sshd.sh",
-                                        "./scripts/centos/20-ansibleuser.sh",
-                                        "./scripts/centos/40-ssltrust.sh",
-                                        "./scripts/centos/80-cloudinit.sh",
-                                        "./scripts/centos/95-motd.sh",
-                                        "./scripts/centos/99-cleanup.sh"
-                                    ]
+            "execute_command":      "echo '{{user `guest_password`}}' | sudo -S -E {{ .Path }}",
+            "scripts":              "{{user `script_files`}}"
         }
     ],
 
     "post-processors": [
         {
-            "type": "manifest",
-            "output": "output.json",
-            "strip_path": false
+            "type":                 "manifest",
+            "output":               "out-centos8.json",
+            "strip_path":           false
         }
     ]
 }
