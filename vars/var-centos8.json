@@ -16,5 +16,5 @@
     "disk_controller":      "pvscsi",
     "network_card":         "vmxnet3",
     "config_file":          "centos8.cfg",
-    "script_files":         "scripts/00-update.sh,scripts/05-repos.sh,scripts/10-configuresshd.sh,scripts/20-ansibleuser.sh,scripts/40-ssltrust.sh,scripts/80-cloudinit.sh,scripts/95-motd.sh,scripts/99-cleanup.sh"
+    "script_files":         "scripts/00-update.sh,scripts/05-repos.sh,scripts/10-configure-sshd.sh,scripts/20-ansibleuser.sh,scripts/40-ssltrust.sh,scripts/80-cloudinit.sh,scripts/95-motd.sh,scripts/99-cleanup.sh"
 }
