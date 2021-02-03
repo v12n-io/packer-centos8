@@ -13,7 +13,12 @@ sudo touch /etc/cloud/cloud-init.disabled
 sed -i 's/^ssh_pwauth:   0/ssh_pwauth:   1/g' /etc/cloud/cloud.cfg
 
 # Remove user section
-sudo sed -i -e 1,3d /etc/cloud/cloud.cfg
+#sudo sed -i -e 1,3d /etc/cloud/cloud.cfg
+sudo sed -i -e '/users:/,+1d' /etc/cloud/cloud.cfg
+
+# Disable EC2 callback and restrict datasource list
+sudo sed -i '1 i\disable_ec2_metadata: True' /etc/cloud/cloud.cfg
+sudo sed -i '1 i\datasource_list: ["OVF", "None"]' /etc/cloud/cloud.cfg
 
 # Disable VMware customization to facilitate static IP address assignment
 sudo sed -i "s/^disable_vmware_customization: false/disable_vmware_customization: true/" /etc/cloud/cloud.cfg
